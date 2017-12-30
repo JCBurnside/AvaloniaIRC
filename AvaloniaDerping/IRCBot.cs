@@ -47,9 +47,12 @@ namespace AvaloniaDerping
             }
         }
 
-        internal void WaitForStart()
+        internal async Task WaitForStart()
         {
-            while (!isStarted) ;
+            while (!isStarted)
+            {
+                await Task.Delay(1000).ConfigureAwait(false);
+            }
         }
 
         private StreamWriter _writer;
@@ -91,11 +94,11 @@ namespace AvaloniaDerping
                     await irc.ConnectAsync(server, port);
 
                     stream = irc.GetStream();
-                    reader = new StreamReader(stream);
-                    writer = new StreamWriter(stream);
-                    login(writer);
-                    writer.WriteLine($"JOIN #{channel}");
-                    writer.Flush();
+                    reader = new StreamReader(_stream);
+                    writer = new StreamWriter(_stream);
+                    login(_writer);
+                    _writer.WriteLine($"JOIN #{channel}");
+                    _writer.Flush();
                     isStarted = true;
                     while (true)
                     {
@@ -127,6 +130,8 @@ namespace AvaloniaDerping
                 }
             } while (retry);
         }
+
+        
 
         private static void DefaultPong(StreamWriter writer, IEnumerable<string> args)
         {
