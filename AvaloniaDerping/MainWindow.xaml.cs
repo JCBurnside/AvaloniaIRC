@@ -16,7 +16,7 @@ namespace AvaloniaDerping
         {
             bot = new IRCBot("irc.twitch.tv", 6667, "<channel>", (writer) =>
              {
-                 writer.WriteLine("PASS oauth:<oauth>");//tyoxiymgeednn4keov4023lae0zh6v
+                 writer.WriteLine("PASS oauth:<oauth>");
                  writer.Flush();
                  writer.WriteLine("NICK <nick>");
                  writer.Flush();
