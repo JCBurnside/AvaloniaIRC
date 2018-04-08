@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-
+﻿
 namespace AvaloniaDerping
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+#pragma warning disable INPC001
     internal class IRCBot : IDisposable
     {
         internal static int RetryLimit = 3;
@@ -42,7 +44,8 @@ namespace AvaloniaDerping
                     return _reader;
                 throw new NotStartedException();
             }
-            private set{
+            private set
+            {
                 _reader = value;
             }
         }
@@ -131,7 +134,7 @@ namespace AvaloniaDerping
             } while (retry);
         }
 
-        
+
 
         private static void DefaultPong(StreamWriter writer, IEnumerable<string> args)
         {
@@ -155,22 +158,24 @@ namespace AvaloniaDerping
             {
                 throw new NotStartedException();
             }
-            if (new Regex("{{1}.{1,}}{1}").Matches(format) is MatchCollection c)
+            string output = new Regex("{{1}.{1,}}{1}").Replace(format, m =>
             {
-                foreach (Match m in c)
+
+                string replaceWith = "";
+                switch (m.Value)
                 {
-                    string replaceWith = "";
-                    switch (m.Value)
-                    {
-                        case "{channel}":
-                            replaceWith = '#' + channel;
-                            break;
-                    }
-                    format = format.Substring(0, m.Index) + replaceWith + format.Substring(m.Index + m.Length);
-                    Console.WriteLine(format + " {0}", o);
+                    case "{channel}":
+                        replaceWith = '#' + channel;
+                        break;
+                    case "{0}":
+                        replaceWith = o.ToString();
+                        break;
                 }
-            }
-            writer.WriteLine(format + " {0}", o);
+                return replaceWith;
+            });
+
+
+            writer.WriteLine(output);
             writer.Flush();
         }
 
@@ -212,6 +217,8 @@ namespace AvaloniaDerping
         }
         #endregion
     }
+#pragma warning restore INPC001
+
     internal class NotStartedException : Exception
     {
         public NotStartedException() : base("IRC not started") { }

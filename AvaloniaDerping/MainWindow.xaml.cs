@@ -1,30 +1,34 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Net.Sockets;
-using System.Reactive.Linq;
-using ReactiveUI;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
-
+﻿
 namespace AvaloniaDerping
 {
-    public class MainWindow : Window, INotifyPropertyChanged
+    using Avalonia;
+    using Avalonia.Controls;
+    using Avalonia.Markup.Xaml;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Net.Sockets;
+    using System.Runtime.CompilerServices;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
+    using System.Threading.Tasks;
+
+    public class MainWindow : Window
     {
         public MainWindow()
         {
-            bot = new IRCBot("irc.twitch.tv", 6667, "<channel>", (writer) =>
-             {
-                 writer.WriteLine("PASS oauth:<oauth>");
-                 writer.Flush();
-                 writer.WriteLine("NICK <nick>");
-                 writer.Flush();
-             });
+            this.DataContext = new MainWindowViewModel();
+            bot = new IRCBot("irc.twitch.tv", 6667, "digital_light", (writer) =>
+            {
+                writer.WriteLine("PASS oauth:jdayjjidikti7o3nh4aslgssiyrcbx");
+                writer.Flush();
+                writer.WriteLine("NICK digital_light");
+                writer.Flush();
+            });
+#pragma warning disable GU0011,CS4014
             this.InitializeComponent();
+#pragma warning disable GU0011,CS4014
             this.AttachDevTools();
         }
 
@@ -36,13 +40,10 @@ namespace AvaloniaDerping
             await bot.Start().ConfigureAwait(true);
             await bot.WaitForStart().ConfigureAwait(false);
 
-            this.DataContext = new ViewModel
-            {
-                test = Observable.Using(() => bot.reader, reader => Observable.FromAsync(reader.ReadLineAsync).Repeat().TakeWhile(s => s != null))
-            };
+
             bot.OnMessageRecived += (sender, args) =>
             {
-                output += String.Join(" ", args.line) + Environment.NewLine;
+                ((MainWindowViewModel)DataContext).Chat += String.Join(" ", args.line) + Environment.NewLine;
             };
             AvaloniaXamlLoader.Load(this);
         }
@@ -59,16 +60,29 @@ namespace AvaloniaDerping
         }
 
     }
-    public class ViewModel : ReactiveObject
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
 
-        private IObservable<string> _test;
-        public IObservable<string> test
+        private string chat;
+
+        public string Chat
         {
-            get => _test; 
-            set => this.RaiseAndSetIfChanged(ref _test, value);
+            get => chat;
+            set
+            {
+                if (value != chat)
+                {
+                    chat = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
-       
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

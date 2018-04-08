@@ -1,4 +1,7 @@
 ﻿<Window xmlns="https://github.com/avaloniaui" MinWidth="500" MinHeight="300">
-
-  <TextBlock Name="Output" Text="{Binding test}"/>
+    <DockPanel LastChildFill="True">
+        <TextBox DockPanel.Dock="Bottom" />
+        <TextPresenter Text="{Binding Text,Mode=OneWay}"
+            Name="Chat"/>
+    </DockPanel>
 </Window>

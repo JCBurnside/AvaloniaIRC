@@ -1,14 +1,15 @@
-﻿using System;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Diagnostics;
-using Avalonia.Logging.Serilog;
-using Avalonia.Themes.Default;
-using Avalonia.Markup.Xaml;
-using Serilog;
-
+﻿
 namespace AvaloniaDerping
 {
+    using System;
+    using Avalonia;
+    using Avalonia.Controls;
+    using Avalonia.Diagnostics;
+    using Avalonia.Logging.Serilog;
+    using Avalonia.Themes.Default;
+    using Avalonia.Markup.Xaml;
+    using Serilog;
+
     class App : Application
     {
 
@@ -29,7 +30,9 @@ namespace AvaloniaDerping
         public static void AttachDevTools(Window window)
         {
 #if DEBUG
+#pragma warning disable GU0011   
             DevTools.Attach(window);
+#pragma warning restore GU0011
 #endif
         }
 
@@ -42,5 +45,10 @@ namespace AvaloniaDerping
                 .CreateLogger());
 #endif
         }
+
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .LogToDebug();
     }
 }
