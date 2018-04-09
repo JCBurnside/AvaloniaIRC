@@ -1,0 +1,21 @@
+﻿<Window xmlns="https://github.com/avaloniaui" MinWidth="500" MinHeight="300">
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Watermark="Chat To Send" Grid.Column="0" Grid.ColumnSpan="4" Name="ChatInput" Text="{Binding Message}" IsEnabled="{Binding HasStarted}"/>
+            <Button Grid.Column="5" Name="SendBtn" Command="{Binding SendMessage}" IsEnabled="{Binding HasStarted}">Send</Button>
+        </Grid>
+        <ScrollViewer>
+            <TextBlock Text="{Binding Chat}"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
