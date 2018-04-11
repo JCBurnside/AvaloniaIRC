@@ -2,10 +2,6 @@
 {
     using Avalonia;
     using Avalonia.Logging.Serilog;
-    using AvaloniaIRC;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     class Program
     {
@@ -16,7 +12,7 @@
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
+                .UsePlatformDetect().UseReactiveUI()
                 .LogToDebug();
     }
 }
