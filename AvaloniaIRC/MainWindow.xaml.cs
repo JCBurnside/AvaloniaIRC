@@ -19,11 +19,11 @@ namespace AvaloniaIRC
         public MainWindow()
         {
 
-            bot = new IRCBot("irc.twitch.tv", 6667, "<channel>", (writer) =>
+            bot = new IRCBot("irc.twitch.tv", 6667, "inthelittlewood", (writer) =>
             {
-                writer.WriteLine("PASS oauth:<oauth>");
+                writer.WriteLine("PASS oauth:jdayjjidikti7o3nh4aslgssiyrcbx");
                 writer.Flush();
-                writer.WriteLine("NICK <nick>");
+                writer.WriteLine("NICK digital_light");
                 writer.Flush();
             });
             this.DataContext = new MainWindowViewModel(bot.WriteLine);

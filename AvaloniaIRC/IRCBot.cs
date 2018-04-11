@@ -91,7 +91,6 @@ namespace AvaloniaIRC
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine("IRCBot.OnMessageRecieved EVENT RAISED");
                         OnMessageRecieved?.Invoke(this, new MessageRecievedEventArgs(String.Join(" ", splits), channel));
                     }
                 }
