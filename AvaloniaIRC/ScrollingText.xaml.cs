@@ -1,4 +1,4 @@
-﻿namespace AvaloniaIRC.Controls
+﻿namespace AvaloniaIRC
 {
     using Avalonia;
     using Avalonia.Controls;
